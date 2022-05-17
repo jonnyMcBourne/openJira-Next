@@ -20,3 +20,9 @@ you have to hit the following endpoint:
 ```
 http://localhost:3000/api/seed 
 ```
+
+## Open Jira
+in your browser go to
+```
+http://localhost:3000
+```
