@@ -10,9 +10,10 @@ const mongoConnection = {
     isConnecting: 0
 }
 export const connect = async ()=>{
-
+    console.log('database',mongoConnection.isConnecting);
+    console.log("connections",mongoose.connections.length);
    if( mongoConnection.isConnecting !== 0 ){
-    console.log('database connected')
+    console.log('database was already connected connected')
     return;
 }
 if(mongoose.connections.length > 0 ){
@@ -28,9 +29,11 @@ mongoConnection.isConnecting = 1;
 console.log('connected to mongoDB',)  
 }
 export const disconect =  async ()=>{
-    if(process.env.NODE_ENV === 'development') return 
-    if( mongoConnection.isConnecting !== 0){
-         await mongoose.disconnect();
-         console.log("Disconected from the database");
-    }
+    if(process.env.NODE_ENV === 'development'){
+        console.log("development Environment db no disconnected")
+        return 
+    } 
+    await mongoose.disconnect();
+    mongoConnection.isConnecting = 0;
+    console.log("Disconected from the database");
 }

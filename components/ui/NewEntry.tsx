@@ -20,7 +20,7 @@ export const NewEntry = () => {
     };
 
     const onSave = () => {
-      if (inputValue.length <= 0) return;
+      if (inputValue.trim().length <= 0) return;
       addNewTask(inputValue);
       setInputValue("");
       setTouched(false);

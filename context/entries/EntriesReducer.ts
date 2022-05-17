@@ -3,7 +3,8 @@ import {EntriesState}  from '.'
 type EntriesActionsType =
   | { type: "[Entry]-Add Entry"; payload: Entry }
   | { type: "[Entry]-Update Entry"; payload: Entry }
-  | { type: "[Entry]-GET-Entries"; payload:  Entry[]  };
+  | { type: "[Entry]-GET-Entries"; payload:  Entry[]  }
+  | { type: "[Entry]-DELETE-Entries"; payload: Entry  };
 
 export const entriesReducer = (state: EntriesState, action:EntriesActionsType):EntriesState => {
     switch (action.type) {
@@ -27,6 +28,11 @@ export const entriesReducer = (state: EntriesState, action:EntriesActionsType):E
             return {
                 ...state,
                 entrie:[...action.payload]
+            }
+        case '[Entry]-DELETE-Entries':
+            return{
+                ...state,
+                entrie:state.entrie.filter(( entry )=>(entry._id !== action.payload._id))
             }
     
         default:

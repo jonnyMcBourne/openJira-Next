@@ -15,6 +15,7 @@ export default async function handler(
     
     switch (req.method) {
         case "PUT":
+          console.log('PUT-')
       if (!mongoose.isValidObjectId(id)) {
         return res
           .status(400)
@@ -24,6 +25,7 @@ export default async function handler(
         await db.connect();
         const entry = await Entry.findById(id);
         if (!entry) {
+          console.log("no entry found")
           await db.disconect();
           return res
             .status(400)
@@ -31,14 +33,32 @@ export default async function handler(
         }
         const { description = entry.description, status = entry.status } = req.body;
         const updated = await Entry.findByIdAndUpdate(id, {description, status},{runValidators:true,new:true});
-        res.status(200).json(updated!);
+        await db.disconect();
+        return res.status(200).json({message:'updated successfully'});
+      } catch (error) {
+        console.log('Error disconnecting DB')
+        
+          await db.disconect();
+        return res.status(500).json({ message: "Something went wrong" });
+      }
+    case "DELETE":
+    try{
+     await db.connect();
+        const entry = await Entry.findById(id);
+        if (!entry) {
+          await db.disconect();
+          return res
+            .status(400)
+            .json({ message: `there is not a entry with id: ${id}` });
+        }
+        const entryDeleted = await Entry.findByIdAndDelete(id);
+        res.status(200).json(entryDeleted!);
         await db.disconect();
       } catch (error) {
           await db.disconect();
         return res.status(500).json({ message: "Something went wrong" });
       }
-    case "DELETE":
-      break;
+
     case 'GET':
       if (!mongoose.isValidObjectId(id)) {
         return res
